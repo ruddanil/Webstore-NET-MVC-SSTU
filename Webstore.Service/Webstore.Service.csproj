@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Webstore.DAL\Webstore.DAL.csproj" />
+    <ProjectReference Include="..\Webstore.Domain\Webstore.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
