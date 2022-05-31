@@ -1,0 +1,55 @@
+﻿@model Webstore.Domain.ViewModel.Cart.CartViewModel
+
+@if (Model?.Items != null)
+{
+    if (Model.Items.Count == 0)
+    {
+        <h1>Cart is empty</h1>
+        <hr />
+        <a class="btn btn-dark" asp-controller="Product" asp-action="ReadProducts">Back to the store</a>
+    }
+    else
+    {
+        <h1>Cart</h1>
+        <hr />
+        <form method="post asp-controller="Cart" asp-action="Update">
+        <table class="table">
+            <thead>
+                <tr><th>Title</th><th>Price</th><th>Quantities</th><th>Price</th></tr>
+            </thead>
+            <tbody>
+                
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Product.Title</td>
+                        <td>@item.Product.Price</td>
+                        <td><input type="number" name="quantities" value="@item.Quantity" max="@item.Product.Quantity" style="width: 50px;" /></td>
+                        <td>@(item.Product.Price * item.Quantity)</td>
+                        <td align="center"><a class="btn btn-dark" asp-controller="Cart" asp-action="DeleteFromCart" asp-route-id_product="@item.Product.Id_product">Удалить</a></td>
+                    </tr>
+                }
+                
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total: @Model.Total</td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-success" asp-controller="Cart" asp-action="CreateOrder">To order</a>
+        <button type="submit" class="btn btn-dark" asp-controller="Cart" asp-action="Update">Update Quantity</button>
+        <a class="btn btn-dark" asp-controller="Product" asp-action="ReadProducts">Back to the store</a>
+        </form>
+    }
+}
+else
+{
+    <h1>Cart is empty</h1>
+    <hr />
+    <a class="btn btn-dark" asp-controller="Product" asp-action="ReadProducts">Back to the store</a>
+}
+
+
+

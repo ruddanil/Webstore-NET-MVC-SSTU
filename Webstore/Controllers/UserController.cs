@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Webstore.Domain.Entity;
+using Webstore.Domain.Helper;
 using Webstore.Domain.ViewModel.User;
 using Webstore.Service.Interfaces;
 
@@ -9,11 +11,11 @@ namespace Webstore.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserService _accountService;
+        private readonly IUserService _userService;
 
         public UserController(IUserService userService)
         {
-            _accountService = userService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -24,7 +26,7 @@ namespace Webstore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _accountService.Register(model);
+                var response = await _userService.Register(model);
                 if (response.StatusCode == Domain.Enum.StatusCode.OK)
                 {
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -32,7 +34,7 @@ namespace Webstore.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", response.Description);
+                ModelState.AddModelError("Error", response.Description);
             }
             return View(model);
         }
@@ -45,23 +47,33 @@ namespace Webstore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _accountService.Login(model);
+                var response = await _userService.Login(model);
                 if (response.StatusCode == Domain.Enum.StatusCode.OK)
                 {
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(response.Data));
-
+                    List<Item> items = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+                    for (var i = 0; i < items?.Count; i++)
+                    {
+                        items.RemoveAt(i);
+                    }
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", items);
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", response.Description);
+                ModelState.AddModelError("Error", response.Description);
             }
             return View(model);
         }
 
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            List<Item> items = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            for (var i = 0; i < items?.Count; i++)
+            {
+                items.RemoveAt(i);
+            }
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", items);
             return RedirectToAction("Index", "Home");
         }
     }

@@ -1,36 +1,7 @@
 ﻿@using Webstore.Domain.ViewModel.Product
 @model List<Webstore.Domain.Entity.Product>
 @{
-    ViewData["Title"] = "Каталог";
+    ViewData["Title"] = "Welcome";
 }
 
-@if (Model == null)
-{
-    <h1>Товары отсутствуют</h1>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr><th>Название</th><th>Количество</th><th>Цена</th><th>Описание</th></tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Model)
-            {
-                <tr>
-                    <td>@product.Title</td>
-                    <td>@product.Description</td>
-                    <td>@product.Quantity</td>
-                    <td>@product.Price</td>
-                    <td><input type="number" min="0" max="@product.Quantity"/></td>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <td>
-                            <a asp-controller="Product" asp-action="DeleteProduct" asp-route-id_product="@product.Id_product">Удалить</a>
-                        </td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    <h1>Welcome!</h1>

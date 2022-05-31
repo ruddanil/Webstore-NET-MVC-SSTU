@@ -144,7 +144,7 @@ namespace Webstore.Service.Implementations
             {
                 return new BaseResponse<bool>()
                 {
-                    Description = $"[DeleteCar] : {ex.Message}",
+                    Description = $"[DeleteProduct] : {ex.Message}",
                     StatusCode = StatusCode.InternalServerError
                 };
             }
@@ -165,6 +165,7 @@ namespace Webstore.Service.Implementations
                 }
                 var data = new ProductViewModel()
                 {
+                    Id_product = product.Id_product,
                     Title = product.Title,
                     Description = product.Description,
                     Img = product.Img,
@@ -186,6 +187,10 @@ namespace Webstore.Service.Implementations
                     StatusCode = StatusCode.InternalServerError
                 };
             }
+        }
+        public Product GetProductById(Guid id)
+        {
+            return _productRepository.ReadAll().FirstOrDefault(x => x.Id_product == id);
         }
     }
 }

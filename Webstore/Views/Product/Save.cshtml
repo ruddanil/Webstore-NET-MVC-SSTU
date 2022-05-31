@@ -1,0 +1,51 @@
+﻿@model Webstore.Domain.ViewModel.Product.ProductViewModel
+@{
+    Layout = "_Layout";
+}
+@if(Model?.Id_product == Guid.Empty || Model?.Id_product == null) 
+{
+    <h1>Create product</h1> 
+}
+else
+{
+    <h1>Update product</h1>
+}
+<hr />
+<form asp-controller="Product" asp-action="Save" enctype="multipart/form-data">
+    @if(Model?.Id_product == Guid.Empty || Model?.Id_product == null)
+    {
+        Guid id = Guid.Empty;
+        <input asp-for="@Model.Id_product" value="@id" hidden>
+    }
+    else
+    {
+        <input asp-for="@Model.Id_product" hidden>
+    }
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div>
+        <label asp-for="@Model.Title" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.Title">
+    </div>
+    <div>
+        <label asp-for="@Model.Quantity" class="col-form-label"></label>
+        <input type="number" class="form-control" asp-for="@Model.Quantity">
+    </div>
+    <div>
+        <label asp-for="@Model.Price" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.Price">
+    </div>
+    <div>
+        <label asp-for="@Model.Description" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.Description">
+    </div>
+    <div>
+        <label asp-for="@Model.Img" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.Img">
+    </div><br />
+    <button class="btn btn-success btn-lg float-right" type="submit">Save</button><br />
+</form>
+<br />
+<div>
+    <a asp-page="/Private/ProductList">Вернуться к списку</a>
+</div>

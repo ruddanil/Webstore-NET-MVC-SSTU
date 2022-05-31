@@ -16,5 +16,6 @@ namespace Webstore.Service.Interfaces
         Task<IBaseResponse<ProductViewModel>> ReadProductByID(Guid id);
         Task<IBaseResponse<Product>> UpdateProduct(Guid id, ProductViewModel model);
         Task<IBaseResponse<bool>> DeleteProduct(Guid id);
+        Product GetProductById(Guid id);
     }
 }

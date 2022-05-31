@@ -6,6 +6,9 @@ namespace Webstore.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+            return RedirectToAction("ReadProducts", "Product");
+        } 
     }
 }

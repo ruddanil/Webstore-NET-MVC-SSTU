@@ -18,13 +18,15 @@ namespace Webstore.Service.Implementations
     public class UserService : IUserService
     {
         private readonly IBaseRepository<User> _userRepository;
-        private readonly ILogger<UserService> _logger;
 
-        public UserService(IBaseRepository<User> userRepository,
-            ILogger<UserService> logger)
+        public UserService(IBaseRepository<User> userRepository)
         {
             _userRepository = userRepository;
-            _logger = logger;
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _userRepository.ReadAll().FirstOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task<BaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
@@ -64,10 +66,9 @@ namespace Webstore.Service.Implementations
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"[Register]: {ex.Message}");
                 return new BaseResponse<ClaimsIdentity>()
                 {
-                    Description = ex.Message,
+                    Description = $"[Register]: {ex.Message}",
                     StatusCode = StatusCode.InternalServerError
                 };
             }
@@ -103,10 +104,9 @@ namespace Webstore.Service.Implementations
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"[Login]: {ex.Message}");
                 return new BaseResponse<ClaimsIdentity>()
                 {
-                    Description = ex.Message,
+                    Description = $"[Login]: {ex.Message}",
                     StatusCode = StatusCode.InternalServerError
                 };
             }

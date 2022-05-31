@@ -32,13 +32,13 @@ namespace Webstore.DAL.Repositories
             _context.Product.Update(product);
             await _context.SaveChangesAsync();
         }
-        public async Task<Product> Update(Product entity)
+        public async Task<Product> Update(Product entity) 
         {
             _context.Product.Update(entity);
             await _context.SaveChangesAsync();
 
             return entity;
         }
-
+     
     }
 }

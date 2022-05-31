@@ -1,0 +1,59 @@
+﻿@using Webstore.Domain.ViewModel.Product
+@model List<Webstore.Domain.Entity.Product>
+
+@{
+    ViewData["Title"] = "Каталог";
+}
+
+@if (Model == null)
+{
+    <h1>There are no products in the store</h1>
+}
+else
+{
+    <h1>Products in the store</h1>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr><th>Title</th><th>Description</th><th>Quantity</th><th>Price</th>@{if(User.IsInRole("User")){<th>Count</th>}}</tr>
+        </thead>
+
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Title</td>
+                    <td>@product.Description</td>
+                    <td>@product.Quantity шт.</td>
+                    <td>@product.Price р.</td>
+                    @if (!User.IsInRole("Admin") && User.Identity.IsAuthenticated)
+                    {
+                        <form method="post" asp-controller="Cart" asp-action="AddToCart">
+                        <td>
+                            <input type="number" class="form-control" id="quantity" name="quantity" value="0" min="1" max="@product.Quantity">
+                            <input id="id_product" name="id_product" value="@product.Id_product" hidden>
+                        </td>
+                        <td>
+                            @if(@product.Quantity <= 0) {<button class="btn btn-success btn-lg float-right" type="submit" disabled>Add to cart</button>}
+                            else {<button class="btn btn-success btn-lg float-right" type="submit">Add to cart</button><br />}
+                        </td>
+                        </form>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <a class="btn btn-dark" asp-controller="Product" asp-action="Save" asp-route-id="@product.Id_product">Edit</a>
+                            <a class="btn btn-dark" asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@product.Id_product">Delete</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-success btn-lg float-right" asp-controller="Product" type="button" asp-action="Save" asp-route-Id="@Guid.Empty">Create new product</a>
+}
+

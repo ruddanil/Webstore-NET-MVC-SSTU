@@ -30,7 +30,7 @@ namespace Webstore.Controllers
         public async Task<IActionResult> ReadProductById(Guid id)
         {
             var response = await _productService.ReadProductByID(id);
-            return PartialView("GetCar", response.Data);
+            return PartialView("ReadProduct", response.Data);
         }
 
         [Authorize(Roles = "Admin")]
@@ -39,14 +39,15 @@ namespace Webstore.Controllers
             var response = await _productService.DeleteProduct(id);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {
-                return RedirectToAction("GetCars");
+                return RedirectToAction("ReadProducts");
             }
             return View("Error", $"{response.Description}");
         }
+        
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> SaveProduct(Guid id)
+        public async Task<IActionResult> Save(Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -58,16 +59,16 @@ namespace Webstore.Controllers
             {
                 return PartialView(response.Data);
             }
-            ModelState.AddModelError("", response.Description);
+            ModelState.AddModelError("Error", response.Description);
             return PartialView();
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveProduct(ProductViewModel product)
+        public async Task<IActionResult> Save(ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
-                if (product.Id_product == Guid.Empty)
+                if (product.Id_product == Guid.Empty || product.Id_product == null)
                 {
                     await _productService.CreateProduct(product);
                 }
@@ -75,7 +76,7 @@ namespace Webstore.Controllers
                 {
                     await _productService.UpdateProduct(product.Id_product, product);
                 }
-                return RedirectToAction("GetProducts");
+                return RedirectToAction("ReadProducts");
             }
             return View();
         }

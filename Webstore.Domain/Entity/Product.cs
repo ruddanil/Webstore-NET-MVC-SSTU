@@ -17,5 +17,6 @@ namespace Webstore.Domain.Entity
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public bool Trashed { get; set; }
+        public ICollection<OrderProduct> OrderProducts { get; set; }// todo 
     }
 }

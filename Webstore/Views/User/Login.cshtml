@@ -1,5 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Webstore.Domain.ViewModel.User.LoginViewModel
+
 @{
+    Layout = "_Layout";
+    ViewData["Title"] = "Login";
 }
+
+<div>
+    <div>
+        <h1>Authorization</h1>
+        <form autocomplete="on" method="post" asp-controller="User" asp-action="Login">
+            <div asp-validation-summary="All" class="text-danger text-left"></div>
+            <label>Email: </label><br />
+            <input asp-for="Email" placeholder="Email" class="form-control textbox-dg font-weight-bold text-center" type="text">
+            <label>Password: </label><br />
+            <input autocomplete="new-password" asp-for="Password" placeholder="Password" class="form-control textbox-dg font-weight-bold text-center" type="password"><br/>
+            <button class="btn btn-success btn-lg float-right">Login</button><br/>
+            Account not created yet? <a asp-controller="User" asp-action="Register" >Registration</a>
+        </form>
+    </div>
+</div>
