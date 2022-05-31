@@ -1,0 +1,67 @@
+﻿@model List<Webstore.Domain.Entity.Order>
+
+@{
+    ViewData["Title"] = "Order list";
+}
+
+@if (Model == null)
+{
+    <h1>The list of orders is empty</h1>
+}
+else
+{
+    <h1>List of orders</h1>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Details</th>
+                <th>Date</th>
+                <th>Price total</th>
+                <th>Order details</th>@{
+                    if (User.IsInRole("Admin"))
+                    {
+                        <th>Delete</th>
+                    }
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>
+                        <p style="margin: 0">@order.IdUserNavigation.FirstName</p>
+                        <p style="margin: 0">@order.IdUserNavigation.LastName</p>
+                        <p style="margin: 0">@order.IdUserNavigation.MiddleName</p>
+                    </td>
+                    <td>
+                        <p style="margin: 0">@order.IdUserNavigation.Email</p>
+                        <p style="margin: 0">@order.IdUserNavigation.Phone</p>
+                    </td>
+                    <td>@order.Date</td>
+                    <td>@order.OrderProducts.Select(x => x.PricePerUnit * x.Quantity).Aggregate((x, y) => x+y)</td>
+                    <td>
+                        @foreach (var orderProduct in order.OrderProducts)
+                        {
+                            <div>
+                                @orderProduct.IdProductNavigation.Title
+                                @orderProduct.Quantity pcs.
+                                @orderProduct.PricePerUnit$
+                            </div>
+                        }
+                    </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <a class="btn btn-dark" asp-controller="Order" asp-action="DeleteOrder" asp-route-id="@order.IdOrder">Delete</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<a class="btn btn-dark" asp-controller="Product" asp-action="ReadProducts">Back to the store</a>

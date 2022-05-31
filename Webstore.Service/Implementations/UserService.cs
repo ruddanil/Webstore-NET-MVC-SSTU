@@ -24,11 +24,6 @@ namespace Webstore.Service.Implementations
             _userRepository = userRepository;
         }
 
-        public async Task<User> GetUserByEmail(string email)
-        {
-            return await _userRepository.ReadAll().FirstOrDefaultAsync(x => x.Email == email);
-        }
-
         public async Task<BaseResponse<ClaimsIdentity>> Register(RegisterViewModel model)
         {
             try
@@ -112,6 +107,60 @@ namespace Webstore.Service.Implementations
             }
         }
 
+        public async Task<IBaseResponse<User>> UpdateUser(Guid id, User model)
+        {
+            try
+            {
+                var user = await _userRepository.ReadAll().FirstOrDefaultAsync(x => x.Id_user == id);
+                if (user == null)
+                {
+                    return new BaseResponse<User>()
+                    {
+                        Description = "User not found",
+                        StatusCode = StatusCode.ProductNotFound
+                    };
+                }
+
+                user = model;
+
+                await _userRepository.Update(user);
+
+                return new BaseResponse<User>()
+                {
+                    Data = user,
+                    StatusCode = StatusCode.OK
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<User>()
+                {
+                    Description = $"[Update] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
+                };
+            }
+        }
+
+        public async Task<IBaseResponse<User>> GetUserByEmail(string email)
+        {
+            try
+            {
+                User user = await _userRepository.ReadAll().FirstOrDefaultAsync(x => x.Email == email);
+                return new BaseResponse<User>()
+                {
+                    Data = user,
+                    StatusCode = StatusCode.OK
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<User>()
+                {
+                    Description = $"[GetUserByEmail] : {ex.Message}",
+                    StatusCode = StatusCode.InternalServerError
+                };
+            }
+        }
         private ClaimsIdentity Authenticate(User user)
         {
             var claims = new List<Claim>

@@ -76,5 +76,33 @@ namespace Webstore.Controllers
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", items);
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var response = await _userService.GetUserByEmail(User.Identity.Name);
+
+                if (response.StatusCode == Domain.Enum.StatusCode.OK)
+                {
+                    return PartialView(response.Data);
+                }
+                ModelState.AddModelError("Error", response.Description);
+            }
+            ModelState.AddModelError("Error", "You are not authenticated");
+            return PartialView();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                await _userService.UpdateUser(user.Id_user, user);
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
     }
 }

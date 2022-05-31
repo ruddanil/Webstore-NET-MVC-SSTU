@@ -20,7 +20,7 @@ namespace Webstore.Domain.Entity
         public string? Email { get; set; }
         public string Password { get; set; } = null!;
         public Role Role { get; set; }
-        public ICollection<Order> Orders { get; set; } // todo 
+        public ICollection<Order> Orders { get; set; } 
        
     }
 }

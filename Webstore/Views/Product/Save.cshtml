@@ -2,9 +2,9 @@
 @{
     Layout = "_Layout";
 }
-@if(Model?.Id_product == Guid.Empty || Model?.Id_product == null) 
+@if (Model?.Id_product == Guid.Empty || Model?.Id_product == null)
 {
-    <h1>Create product</h1> 
+    <h1>Create product</h1>
 }
 else
 {
@@ -12,7 +12,7 @@ else
 }
 <hr />
 <form asp-controller="Product" asp-action="Save" enctype="multipart/form-data">
-    @if(Model?.Id_product == Guid.Empty || Model?.Id_product == null)
+    @if (Model?.Id_product == Guid.Empty || Model?.Id_product == null)
     {
         Guid id = Guid.Empty;
         <input asp-for="@Model.Id_product" value="@id" hidden>
@@ -46,6 +46,4 @@ else
     <button class="btn btn-success btn-lg float-right" type="submit">Save</button><br />
 </form>
 <br />
-<div>
-    <a asp-page="/Private/ProductList">Вернуться к списку</a>
-</div>
+<a class="btn btn-dark" asp-controller="Product" asp-action="ReadProducts">Back to the store</a>

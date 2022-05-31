@@ -20,24 +20,20 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Product" asp-action="ReadProducts">Store</a>
+                        </li>
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Product" asp-action="ReadProducts">Store</a>
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="User" asp-action="Register">Registration</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="User" asp-action="Login">Login</a>
-                            </li>
+                            </li> 
                         }
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Product" asp-action="ReadProducts">Store</a>
-                            </li>
-                            
                             @if (!User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
@@ -47,9 +43,12 @@
                             else if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Order" asp-action="">List of orders</a>
+                                    <a class="nav-link text-dark" asp-controller="Order" asp-action="ReadOrders">List of orders</a>
                                 </li>
                             }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="Update">Profile</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-danger" asp-controller="User" asp-action="Logout">Logout</a>
                             </li>

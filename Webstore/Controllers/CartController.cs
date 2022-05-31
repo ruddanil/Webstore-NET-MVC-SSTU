@@ -127,7 +127,7 @@ namespace Webstore.Controllers
 
                 DateTime date = DateTime.Now;
 
-                Order order = new(user.Id_user, date);
+                Order order = Order.OrderConstr(user.Id_user, date);
                 _context.Add(order);
                 _context.SaveChanges();
                 Guid id_order = order.IdOrder;
@@ -135,28 +135,31 @@ namespace Webstore.Controllers
                 {
                     try
                     {
-                        Product product = items[i].Product;
-                        if (product.Quantity > 0 && (product.Quantity - items[i].Quantity) >= 0)
+                        Product? productBd = _context.Product.FirstOrDefault(x => x.Id_product == items[i].Product.Id_product && x.Quantity >= 1);
+                        if (productBd != null && (productBd.Quantity - items[i].Quantity) >= 0)
                         {
-                            Guid id_product = product.Id_product;
+                            Guid id_product = productBd.Id_product;
                             int quantity = items[i].Quantity;
-                            decimal pricePerUnit = product.Price;
+                            decimal pricePerUnit = productBd.Price;
                             OrderProduct orderProduct = new(id_order, id_product, quantity, pricePerUnit);
                             _context.Add(orderProduct);
                             _context.SaveChanges();
 
-                            product.Quantity -= items[i].Quantity;
-                            _context.Update(product);
+                            productBd.Quantity -= items[i].Quantity;
+                            _context.Update(productBd);
                             _context.SaveChanges();
                         }
                         else
                         {
-                            return View("Error", $"One or more items from the order are no longer available, but the available items are purchased");
+                            String errors = "";
+                            _context.Order.Remove(order);
+                            errors += productBd.Title + ", ";
+                            return View("Error", $"These products are no longer available: {errors}, but the available items are purchased");
                         }
                     }
                     catch (Exception ex)
                     {
-                        return View("Error", $"One or more items from the order are no longer available, but the available items are purchased");
+                        return View("Error", $"{ex}");
                     }
                 }
                 for (var i = 0; i < items.Count; i++)

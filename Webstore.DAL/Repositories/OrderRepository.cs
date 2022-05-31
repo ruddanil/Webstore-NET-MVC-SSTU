@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,11 @@ namespace Webstore.DAL.Repositories
         }
         public IQueryable<Order> ReadAll()
         {
-            return _context.Order;
+            var s = _context.Order
+                .Include(x => x.OrderProducts).ThenInclude(x => x.IdProductNavigation)
+                .Include(x => x.IdUserNavigation);
+            s.Load();
+            return s;
         }
         public async Task Delete(Order product)
         {

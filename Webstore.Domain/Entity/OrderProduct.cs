@@ -17,7 +17,6 @@ namespace Webstore.Domain.Entity
         public decimal PricePerUnit { get; set; }
 
         public virtual Order IdOrderNavigation { get; set; } = null!;
-
         public virtual Product IdProductNavigation { get; set; } = null!;
 
         public OrderProduct(Guid idOrder, Guid idProduct, int quantity, decimal pricePerUnit)
@@ -26,6 +25,17 @@ namespace Webstore.Domain.Entity
             IdProduct = idProduct;
             Quantity = quantity;
             PricePerUnit = pricePerUnit;
+        }
+
+        public OrderProduct(Guid idOrderProduct, Guid idOrder, Guid idProduct, int quantity, decimal pricePerUnit, Order idOrderNavigation, Product idProductNavigation)
+        {
+            IdOrderProduct = idOrderProduct;
+            IdOrder = idOrder;
+            IdProduct = idProduct;
+            Quantity = quantity;
+            PricePerUnit = pricePerUnit;
+            IdOrderNavigation = idOrderNavigation;
+            IdProductNavigation = idProductNavigation;
         }
     }
 }

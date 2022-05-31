@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -10,15 +11,15 @@ namespace Webstore.Domain.Entity
    
     public class Order
     {
-        public Order()
-        {
-            OrderProducts = new HashSet<OrderProduct>();
-        }
-
-        public Order(Guid idUser, DateTime date)
+        private Order(Guid idUser, DateTime date)
         {
             IdUser = idUser;
             Date = date;
+        }
+
+        public static Order OrderConstr(Guid idUser, DateTime date)
+        {
+            return new Order(idUser, date);
         }
 
         public Guid IdOrder { get; set; }
@@ -27,5 +28,14 @@ namespace Webstore.Domain.Entity
 
         public virtual User IdUserNavigation { get; set; } = null!;
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
+        
+        public Order(Guid idOrder, Guid idUser, DateTime date, User idUserNavigation, ICollection<OrderProduct> orderProducts)
+        {
+            IdOrder = idOrder;
+            IdUser = idUser;
+            Date = date;
+            IdUserNavigation = idUserNavigation;
+            OrderProducts = orderProducts;
+        }
     }
 }

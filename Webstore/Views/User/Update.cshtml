@@ -1,0 +1,52 @@
+﻿@using Webstore.Domain.Enum
+@model Webstore.Domain.Entity.User
+@{
+    Layout = "_Layout";
+}
+<h1>Update user</h1>
+<hr />
+<form asp-controller="User" asp-action="Update" enctype="multipart/form-data">
+
+    <input asp-for="@Model.Id_user" hidden>
+    <input asp-for="@Model.Orders" hidden>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div>
+        <label asp-for="@Model.FirstName" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.FirstName">
+    </div>
+    <div>
+        <label asp-for="@Model.MiddleName" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.MiddleName">
+    </div>
+    <div>
+        <label asp-for="@Model.LastName" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.LastName">
+    </div>
+    <div>
+        <label asp-for="@Model.Age" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.Age">
+    </div>
+    <div>
+        <label asp-for="@Model.Phone" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.Phone">
+    </div>
+     <div>
+        <label asp-for="@Model.Password" class="col-form-label"></label>
+        <input type="password" class="form-control" asp-for="@Model.Password">
+    </div>
+    <div>
+        <label asp-for="@Model.Email" class="col-form-label"></label>
+        <input type="text" class="form-control" asp-for="@Model.Email">
+    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <div>
+            <label asp-for="@Model.Role" class="col-form-label"></label>
+            <input type="number" min=0 max=1 value="0" class="form-control" asp-for="@Model.Role">
+        </div>
+    }
+    <br />
+    <button class="btn btn-success btn-lg float-right" type="submit">Save</button><br />
+</form>
+<br />
+<a class="btn btn-dark" asp-controller="Product" asp-action="ReadProducts">Back to the store</a>

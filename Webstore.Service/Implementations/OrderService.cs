@@ -21,7 +21,7 @@ namespace Webstore.Service.Implementations
         }
         public async Task<IBaseResponse<Order>> CreateOrder(Guid id_user, DateTime date)
         {
-            Order order = new(id_user, date);
+            Order order = Order.OrderConstr(id_user, date);
             try
             {
                 await _orderRepository.Create(order);

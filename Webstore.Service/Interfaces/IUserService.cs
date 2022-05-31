@@ -14,6 +14,7 @@ namespace Webstore.Service.Interfaces
     {
         Task<BaseResponse<ClaimsIdentity>> Register(RegisterViewModel model);
         Task<BaseResponse<ClaimsIdentity>> Login(LoginViewModel model);
-        Task<User> GetUserByEmail(string email);
+        Task<IBaseResponse<User>> UpdateUser(Guid id, User model);
+        Task<IBaseResponse<User>> GetUserByEmail(string email);
     }
 }
