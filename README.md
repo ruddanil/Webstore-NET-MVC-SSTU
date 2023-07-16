@@ -1,4 +1,4 @@
-# Webstore-NET-SSTU
+# Webstore-NET-MVC-SSTU
 A web application developed based on a three-tier architecture and the Model-View-Controller (MVC) design pattern. It utilizes the MS SQL DBMS.
 
 Description of the implemented functionality:
